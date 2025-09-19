@@ -1,0 +1,12 @@
+[
+  {
+    "question": "who are you",
+    "keywords": ["name", "you", "who"],
+    "answer": "I am George Adriel Kurniawan, a web developer specializing in AI and full-stack development."
+  },
+  {
+    "question": "skills",
+    "keywords": ["skills", "technologies"],
+    "answer": "React, Node.js, Python, and AI integrations."
+  }
+]
