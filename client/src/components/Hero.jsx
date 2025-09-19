@@ -1,5 +1,6 @@
 import GradientText from './GradientText'
 import ShinyText from './ShinyText';
+import { Highlight } from "@chakra-ui/react"
 
 export default function Hero() {
   return (
@@ -13,7 +14,20 @@ export default function Hero() {
         showBorder={false}
         className="text-5xl md:text-10xl font-extrabold cursor-target"
       >
-        Hi, I'm George
+        <Highlight
+  query="George"
+  styles={{
+    display: "inline-block", // ✅ stops clipping
+    px: 3,
+    py: 1,
+    rounded: "full",
+    bg: "purple.500",
+    color: "white",
+    lineHeight: "1.5",       // also helps vertically center text
+  }}
+>
+  Hi, I'm George
+</Highlight>
       </GradientText>
       <ShinyText 
         text="A 17-year old student who focuses in AI development and constantly open to learn more programming technologies." 
