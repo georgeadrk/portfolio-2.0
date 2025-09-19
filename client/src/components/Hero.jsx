@@ -1,8 +1,13 @@
 import GradientText from './GradientText'
 import ShinyText from './ShinyText';
-import { Highlight } from "@chakra-ui/react"
+import { Highlight, keyframes } from "@chakra-ui/react"
 
 export default function Hero() {
+  const gradientAnimation = keyframes`
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+`;
   return (
     <section
       id="hero"
@@ -17,13 +22,16 @@ export default function Hero() {
         <Highlight
   query="George"
   styles={{
-    display: "inline-block", // ✅ stops clipping
+    display: "inline-block",        // make it block-like
+    lineHeight: "1.4",              // more breathing room vertically
     px: 3,
     py: 1,
-    rounded: "full",
-    bg: "purple.500",
-    color: "white",
-    lineHeight: "1.5",       // also helps vertically center text
+    rounded: "md", // slight rounded edges
+    bgGradient: "linear(to-r, #BD8AFF, #2E5BFF, #BD8AFF)", // gradient background
+    backgroundSize: "200% 200%", // so it can animate
+    animation: `${gradientAnimation} 4s ease infinite`, // run the animation
+    color: "white", // text color inside
+    fontWeight: "bold",
   }}
 >
   Hi, I'm George
