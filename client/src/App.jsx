@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+// App.jsx
+import React, { useState, useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 import { ChakraProvider } from "@chakra-ui/react";
@@ -11,18 +12,21 @@ import ChatbotSection from "./components/ChatbotSection";
 import Footer from "./components/Footer";
 import TargetCursor from "./components/TargetCursor";
 import DarkVeil from "./components/DarkVeil";
-import useSmartScrollSnap from "./components/useScrollSnap";
+import useScrollSnap from "./components/useScrollSnap";
+import ScrollReveal from "./components/ScrollReveal";
 
 gsap.registerPlugin(ScrollToPlugin);
 
 export default function App() {
   const [showNavbar, setShowNavbar] = useState(false);
+  const scrollContainerRef = useRef(null);
 
-  useSmartScrollSnap({
+  useScrollSnap({
     selector: "section",
-    duration: 0.8,
-    threshold: 0.5,
-    deadZone: 0.3,
+    navbarSelector: 100,
+    calibrationOffset: 40,
+    snapDuration: 0.8,
+    scrollContainerRef, // pass the ref here if your hook supports it
   });
 
   useEffect(() => {
@@ -40,7 +44,18 @@ export default function App() {
 
   return (
     <ChakraProvider>
-      <div style={{ width: "100%", minHeight: "100vh", position: "relative", background: "#0a0a0a", color: "white" }}>
+      <div
+        ref={scrollContainerRef}
+        style={{
+          width: "100%",
+          minHeight: "100vh",
+          position: "relative",
+          background: "#0a0a0a",
+          color: "white",
+          overflowY: "scroll", // make scroll container explicit
+          scrollSnapType: "y mandatory", // snap works on this container
+        }}
+      >
         <DarkVeil />
         <div className="darkveil-overlay"></div>
 
@@ -54,17 +69,29 @@ export default function App() {
           </div>
 
           <section id="hero-section">
-            <Hero />
+            <ScrollReveal scrollContainerRef={scrollContainerRef}>
+              <Hero />
+            </ScrollReveal>
           </section>
+
           <section>
-            <About />
+            <ScrollReveal scrollContainerRef={scrollContainerRef}>
+              <About />
+            </ScrollReveal>
           </section>
+
           <section>
-            <Projects />
+            <ScrollReveal scrollContainerRef={scrollContainerRef}>
+              <Projects />
+            </ScrollReveal>
           </section>
+
           <section>
-            <ChatbotSection />
+            <ScrollReveal scrollContainerRef={scrollContainerRef}>
+              <ChatbotSection />
+            </ScrollReveal>
           </section>
+
           <Footer />
           <TargetCursor spinDuration={2} hideDefaultCursor={true} />
         </div>
