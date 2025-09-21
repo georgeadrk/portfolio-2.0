@@ -1,7 +1,9 @@
+/* === Tailwind Base === */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* === Root Variables === */
 :root {
   --bg-dark: #000000;
   --bg-light: #f5f5f5;
@@ -9,15 +11,37 @@
   --accent-purple: #6a0dad;
   --text-light: #ffffff;
   --text-dark: #000000;
+
   cursor: none;
 }
 
+/* === Global Resets === */
+html,
 body {
   margin: 0;
+  padding: 0;
   font-family: Arial, Helvetica, sans-serif;
+
+  /* Hide scrollbars but still allow scrolling */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge Legacy */
+  scrollbar-gutter: none; /* Removes reserved gutter space */
+  overflow-x: hidden; /* Prevent horizontal glow */
+
+  /* Default background */
+  background-color: var(--bg-dark);
+  color: var(--text-light);
+
+  /* Smooth color transitions */
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Edge */
+}
+
+/* === Themes === */
 body.dark {
   background-color: var(--bg-dark);
   color: var(--text-light);
@@ -28,6 +52,7 @@ body.light {
   color: var(--text-dark);
 }
 
+/* === Header === */
 header {
   padding: 1rem;
   display: flex;
@@ -36,16 +61,20 @@ header {
   background-color: var(--accent-darkblue);
 }
 
+/* === Cursor Behavior === */
 button:hover,
 a:hover {
   cursor: none;
 }
 
+/* === Content Layer === */
 .site-content {
   position: relative;
-  z-index: 2; /* above overlay */
+  z-index: 2; /* Above overlays */
+  overflow: hidden;
 }
 
+/* === Glow Button === */
 .glow-button {
   position: relative;
   display: inline-block;
@@ -54,22 +83,20 @@ a:hover {
   font-weight: 700;
   text-transform: uppercase;
 
-  /* NEW: transparent black background */
-  background: rgba(0, 0, 0, 0.6); /* 60% black */
+  /* Background */
+  background: rgba(0, 0, 0, 0.6);
   border-radius: 0.5rem;
   overflow: hidden;
-  z-index: 0;
-
-  /* NEW: white text */
   color: #ffffff;
+  z-index: 0;
 }
 
-/* Border animation */
+/* Animated Gradient Border */
 .glow-button::before {
   content: "";
   position: absolute;
   inset: 0;
-  padding: 2px; /* thickness of border */
+  padding: 2px; /* Border thickness */
   border-radius: inherit;
   background: linear-gradient(
     270deg,
@@ -80,19 +107,21 @@ a:hover {
   );
   background-size: 300% 300%;
   animation: borderflow 6s linear infinite;
+
   -webkit-mask:
     linear-gradient(#fff 0 0) content-box,
     linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
   mask-composite: exclude;
+
   z-index: -1;
 }
 
-/* Optional glow outside border */
+/* Glow Outside Border */
 .glow-button::after {
   content: "";
   position: absolute;
-  inset: -5px;
+  inset: 0px;
   border-radius: inherit;
   background: linear-gradient(
     270deg,
@@ -108,25 +137,12 @@ a:hover {
   z-index: -2;
 }
 
-/* Animations */
-@keyframes borderflow {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
-}
-
-/* Optional hover effect */
+/* Hover State */
 .glow-button:hover {
-  background: rgba(0, 0, 0, 0.6); /* slightly darker on hover */
+  background: rgba(0, 0, 0, 0.6);
 }
 
-/* === Animated Glowing Border for Cards === */
+/* === Glow Card === */
 .glow-card {
   position: relative;
   border-radius: 0.75rem;
@@ -135,12 +151,12 @@ a:hover {
   z-index: 0;
 }
 
-/* border animation */
+/* Card Border Animation */
 .glow-card::before {
   content: "";
   position: absolute;
   inset: 0;
-  padding: 2px; /* thickness of border */
+  padding: 2px; /* Border thickness */
   border-radius: inherit;
   background: linear-gradient(
     270deg,
@@ -151,15 +167,17 @@ a:hover {
   );
   background-size: 300% 300%;
   animation: borderflow 6s linear infinite;
+
   -webkit-mask:
     linear-gradient(#fff 0 0) content-box,
     linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
   mask-composite: exclude;
+
   z-index: 1;
 }
 
-/* glow outside the border */
+/* Glow Outside Card Border */
 .glow-card::after {
   content: "";
   position: absolute;
@@ -179,6 +197,13 @@ a:hover {
   z-index: 0;
 }
 
+/* Hover Lift Effect */
+.glow-card:hover {
+  transform: translateY(-4px);
+  transition: transform 0.3s ease;
+}
+
+/* === Animated Border Gradient Keyframes === */
 @keyframes borderflow {
   0% {
     background-position: 0% 50%;
@@ -191,8 +216,18 @@ a:hover {
   }
 }
 
-/* optional hover lift effect */
-.glow-card:hover {
-  transform: translateY(-4px);
-  transition: transform 0.3s ease;
+html, body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;          /* no horizontal overflow */
+  background-color: #0a0a0a;   /* same as your container */
+  scrollbar-width: none;       /* hide Firefox scrollbar */
+}
+
+/* Hide scrollbars (WebKit) */
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none;
 }

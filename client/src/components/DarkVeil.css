@@ -3,8 +3,10 @@
   top: 0;
   left: 0;
   width: 100vw;
-  height: 100vh;
-  z-index: 0; /* bottom */
+  height: calc(100vh + 200px);
+  display: block;
+  z-index: 1; /* behind overlay but above background */
+  pointer-events: none;
 }
 
 .darkveil-overlay {
@@ -13,8 +15,8 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  z-index: 1; /* above canvas but below content */
-  background: rgba(0, 0, 0, 0.4); 
+  z-index: 2; /* overlay above canvas */
+  background: rgba(0, 0, 0, 0.3);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   pointer-events: none;
