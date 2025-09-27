@@ -1,102 +1,85 @@
 import React, { useState } from "react";
-import "./TypingDots.css"; // add this CSS file for dots animation
 
 export default function ChatbotSection() {
-  const [messages, setMessages] = useState([
-    { role: "assistant", text: "Hi! Ask me anything about me." },
-  ]);
   const [input, setInput] = useState("");
+  const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  async function handleSend(e) {
-    e.preventDefault();
-    if (!input.trim()) return;
+  const sendMessage = async () => {
+    if (!input || !input.trim()) return;
 
-    // Add user message locally
-    const newMessages = [...messages, { role: "user", text: input }];
-    setMessages(newMessages);
+    // Save current input before clearing
+    const question = input;
+    const userMsg = { role: "user", text: question };
+    setMessages((prev) => [...prev, userMsg]);
+    setInput("");
     setLoading(true);
 
     try {
-      // Send full conversation to server
-      const res = await fetch("http://localhost:3001/api/chat", {
+      const response = await fetch("http://localhost:3001/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          messages: newMessages.map((m) => ({
-            role: m.role === "assistant" ? "assistant" : "user",
-            content: m.text,
-          })),
-        }),
+        body: JSON.stringify({ message: question }),
       });
 
-      const data = await res.json();
-      const answer =
-        data.reply || "I’m not sure about that yet. (Check your server.)";
-
-      // Append AI answer
-      setMessages((m) => [...m, { role: "assistant", text: answer }]);
-    } catch (err) {
-      console.error(err);
-      setMessages((m) => [
-        ...m,
-        { role: "assistant", text: "Server error. Check console." },
+      const data = await response.json();
+      const botReply = {
+        role: "bot",
+        text: data.reply || "No reply from server.",
+      };
+      setMessages((prev) => [...prev, botReply]);
+    } catch (error) {
+      console.error("Error sending message:", error);
+      setMessages((prev) => [
+        ...prev,
+        { role: "bot", text: "⚠️ Error talking to the server." },
       ]);
     } finally {
       setLoading(false);
-      setInput("");
     }
-  }
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") sendMessage();
+  };
 
   return (
     <section
       id="chatbot"
-      className="py-24 px-6 max-w-5xl mx-auto text-center text-gray-100"
+      className="w-full max-w-lg mx-auto p-4 bg-gray-900 text-white rounded-xl shadow-lg"
     >
-      <h2 className="text-4xl font-bold mb-6 text-white">Ask Me Anything</h2>
+      <h2 className="text-xl font-bold mb-4">Chat with me (Gemini)</h2>
 
-      <div className="max-w-md mx-auto p-4 bg-darkBlue text-white rounded-xl shadow-lg">
-        <h3 className="text-xl font-bold mb-3">Chat with Me</h3>
-        <div className="h-64 overflow-y-auto border border-purpleAccent rounded p-2 mb-2">
-          {messages.map((m, i) => (
-            <div
-              key={i}
-              className={`mb-2 ${
-                m.role === "user"
-                  ? "text-blue-400 text-right"
-                  : "text-purple-300 text-left"
-              }`}
-            >
-              <span>{m.text}</span>
-            </div>
-          ))}
-
-          {loading && (
-            <div className="text-purple-500 typing-dots">
-              <span>.</span>
-              <span>.</span>
-              <span>.</span>
-            </div>
-          )}
-        </div>
-
-        <form onSubmit={handleSend} className="flex gap-2">
-          <input
-            type="text"
-            className="flex-1 p-2 rounded bg-gray-800 text-white cursor-target"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            placeholder="Type your question…"
-            disabled={loading}
-          />
-          <button
-            type="submit"
-            className="inline-block bg-purpleAccent text-white rounded text-lg shadow-lg cursor-target glow-button"
-            disabled={loading}
+      <div className="h-64 overflow-y-auto bg-gray-800 p-3 rounded mb-4">
+        {messages.map((msg, idx) => (
+          <div
+            key={idx}
+            className={`mb-2 ${
+              msg.role === "user" ? "text-blue-300" : "text-green-300"
+            }`}
           >
-            Send
-          </button>
-        </form>
+            <strong>{msg.role === "user" ? "You" : "Georg"}:</strong>{" "}
+            {msg.text}
+          </div>
+        ))}
+        {loading && <div className="text-gray-400">Bot is typing…</div>}
+      </div>
+
+      <div className="flex space-x-2">
+        <input
+          type="text"
+          className="flex-1 p-2 rounded bg-gray-700 text-white"
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          onKeyDown={handleKeyDown}
+          placeholder="Type your message…"
+        />
+        <button
+          onClick={sendMessage}
+          className="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded"
+        >
+          Send
+        </button>
       </div>
     </section>
   );
