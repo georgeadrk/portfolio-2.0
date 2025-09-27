@@ -1,12 +1,28 @@
 {
-  "name": "portofolio-2.0",
+  "name": "portfolio-2.0",
   "version": "1.0.0",
   "private": true,
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "serve": "serve -s build -l $PORT",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
+  },
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-scripts": "^5.0.1",
+    "@chakra-ui/react": "^2.8.2",
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.1",
+    "framer-motion": "^11.18.2",
+    "gsap": "^3.13.0",
+    "ogl": "^1.0.11",
+    "serve": "^14.2.0"
+  },
+  "engines": {
+    "node": "18.x"
   },
   "browserslist": {
     "production": [
@@ -19,16 +35,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "dependencies": {
-    "@chakra-ui/react": "^2.8.2",
-    "@emotion/react": "^11.14.0",
-    "@emotion/styled": "^11.14.1",
-    "framer-motion": "^11.18.2",
-    "gsap": "^3.13.0",
-    "ogl": "^1.0.11"
-  },
-  "devDependencies": {
-    "eslint-plugin-react-hooks": "^5.2.0"
   }
 }

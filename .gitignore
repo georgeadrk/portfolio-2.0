@@ -1,1 +1,10 @@
-node_modules
+# Node modules
+client/node_modules
+server/node_modules
+
+# React build
+client/build
+
+# Environment files
+client/.env
+server/.env
