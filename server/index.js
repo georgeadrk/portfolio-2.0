@@ -1,28 +1,53 @@
+// index.js (ESM)
 import express from "express";
-import cors from "cors";
+import fetch from "node-fetch";
+import dotenv from "dotenv";
 
+dotenv.config();
 const app = express();
-app.use(cors());
 app.use(express.json());
 
-// Simple manual info
-const myInfo = {
-  name: "George Adriel Kurniawan",
-  skills: "JavaScript, React, Node.js",
-  hobbies: "Coding, Gaming, Design, Photography",
-};
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 
-// POST /api/ask
-app.post("/api/ask", (req, res) => {
-  const question = (req.body.question || "").toLowerCase();
+app.post("/chat", async (req, res) => {
+  const { message } = req.body;
 
-  let answer = "I don’t have info about that yet.";
+  try {
+    const response = await fetch(
+      "https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=" + GEMINI_API_KEY,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          contents: [
+            {
+              parts: [{ text: message }]
+            }
+          ]
+        })
+      }
+    );
 
-  if (question.includes("name")) answer = `My name is ${myInfo.name}.`;
-  if (question.includes("skills")) answer = `My skills: ${myInfo.skills}.`;
-  if (question.includes("hobbies")) answer = `My hobbies: ${myInfo.hobbies}.`;
+    if (!response.ok) {
+      const text = await response.text();
+      console.error("Gemini API error:", text);
+      return res.status(500).send(text);
+    }
 
-  res.json({ answer });
+    const data = await response.json();
+    // Gemini returns text at data.candidates[0].content.parts[0].text
+    const botReply =
+      data.candidates?.[0]?.content?.parts?.[0]?.text || "No response from Gemini.";
+
+    res.json({ reply: botReply });
+  } catch (err) {
+    console.error("Server error:", err);
+    res.status(500).json({ error: err.message });
+  }
 });
 
-app.listen(5000, () => console.log("Server running on http://localhost:5000"));
+app.listen(3001, () => {
+  console.log("Server running at http://localhost:3001");
+});
