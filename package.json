@@ -4,10 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-  "dev": "vite",
-  "build": "vite build",
-  "preview": "vite preview",
-  "postinstall": ""
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "postinstall": ""
   },
   "keywords": [],
   "author": "",
@@ -24,6 +24,8 @@
     "three": "^0.180.0"
   },
   "devDependencies": {
-    "serve": "^14.2.5"
+    "@vitejs/plugin-react": "^5.1.0",
+    "serve": "^14.2.5",
+    "vite": "^7.1.12"
   }
 }
